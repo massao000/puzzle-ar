@@ -42,7 +42,7 @@ def overlapImg(img, pts_dst, frame):
     
     return frame
 
-# class VideoProcessor:
+# カメラメイン処理
 def video_frame_callback(frame):
     frame = frame.to_ndarray(format = 'bgr24')
 
@@ -84,3 +84,4 @@ def video_frame_callback(frame):
     return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
 webrtc_streamer(key="example", video_frame_callback=video_frame_callback)
+st.write('Hello world')
