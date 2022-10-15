@@ -1,13 +1,12 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer
 import cv2
-import cv2.aruco as aruco
+# import cv2.aruco as aruco
 import numpy as np
 import os
 import av
 
-
-
+aruco = cv2.aruco
 
 st.title('Streamlit App Test')
 st.write('Hello world')
