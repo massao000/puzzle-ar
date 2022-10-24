@@ -48,9 +48,12 @@ def video_frame_callback(frame):
     # camera = cv2.VideoCapture(0)
 
     # マーカーに表示する画像
-    img = cv2.imread("0001_kaguramea.png")
-    img2 = cv2.imread("71y6cwHTrsL._AC_SL1418_.jpg")
-    img3 = cv2.imread("20211015.jpg")
+    try:
+        img = cv2.imread("0001_kaguramea.png")
+        img2 = cv2.imread("71y6cwHTrsL._AC_SL1418_.jpg")
+        img3 = cv2.imread("20211015.jpg")
+    except:
+        pass
     
     # ret, feame = camera.read()
     
@@ -62,21 +65,21 @@ def video_frame_callback(frame):
     frame = aruco.drawDetectedMarkers(frame, corners, ids)
     
     # マーカIDが存在するか
-    if np.all(ids != None):
-        # 検出されたマーカIDの数だけ繰り返す
-        for i in range(len(ids)):
-            # 検出されたマーカ座標のデータ
-            pts_dst = np.array([
-                (corners[i][0][0][0], corners[i][0][0][1]),
-                (corners[i][0][1][0], corners[i][0][1][1]),
-                (corners[i][0][2][0], corners[i][0][2][1]),
-                (corners[i][0][3][0], corners[i][0][3][1]),
-                    ])
+#     if np.all(ids != None):
+#         # 検出されたマーカIDの数だけ繰り返す
+#         for i in range(len(ids)):
+#             # 検出されたマーカ座標のデータ
+#             pts_dst = np.array([
+#                 (corners[i][0][0][0], corners[i][0][0][1]),
+#                 (corners[i][0][1][0], corners[i][0][1][1]),
+#                 (corners[i][0][2][0], corners[i][0][2][1]),
+#                 (corners[i][0][3][0], corners[i][0][3][1]),
+#                     ])
             
-            if ids[i] == 1:
-                frame = overlapImg(img, pts_dst, frame)
-            elif ids[i] == 2:
-                frame = overlapImg(img2, pts_dst, frame)
+#             if ids[i] == 1:
+#                 frame = overlapImg(img, pts_dst, frame)
+#             elif ids[i] == 2:
+#                 frame = overlapImg(img2, pts_dst, frame)
                 
     cv2.imshow('test', frame)
 
