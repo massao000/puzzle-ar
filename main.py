@@ -81,7 +81,7 @@ def video_frame_callback(frame):
 #             elif ids[i] == 2:
 #                 frame = overlapImg(img2, pts_dst, frame)
                 
-    cv2.imshow('test', frame)
+#     cv2.imshow('test', frame)
 
     return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
