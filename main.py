@@ -59,13 +59,13 @@ def video_frame_callback(frame):
 # マーカーに表示する画像
 if st.button('random'):
     try:
-        img = cv2.imread("2022-10-30_024439-Trinart-characters.png")
+        img = cv2.imread("imgs/2022-10-30_024439-Trinart-characters.png")
         img = imgCut(img)
     except:
         pass
 else:
     try:
-        img = cv2.imread("2022-10-30_024439-Trinart-characters.png")
+        img = cv2.imread("imgs/2022-10-30_024439-Trinart-characters.png")
         img = imgCut(img)
     except:
         pass
