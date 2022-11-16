@@ -6,6 +6,7 @@ import numpy as np
 import os
 import av
 import random
+from PIL import Image
 
 from package import *
 
@@ -92,6 +93,8 @@ st.download_button(
     file_name="ARmarker.pdf",
     mime='application/octet-stream')
 
+# テスト表示
+image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
 st.image(img, caption='Sunrise by the mountains')
 
 
