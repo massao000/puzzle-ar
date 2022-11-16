@@ -98,9 +98,13 @@ def video_frame_callback(frame):
     frame3 = trimming(frame2)
     try:
         com = comparison(comparison_img, frame3)
-        if  com > 0.97:
-            with lock:
-                    result["percent"] = com
+        if  com > 0.99:
+            cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 10, 10), 5, cv2.LINE_AA)
+        else:
+            cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 5, cv2.LINE_AA)
+        # if  com > 0.97:
+        #     with lock:
+        #             result["percent"] = com
     except:
         pass
             # result["ori_img"] = original_img
@@ -177,15 +181,15 @@ with st.sidebar:
     placeholder = st.empty()
     
     # これを使うとランダムボタン押すとストップする    
-    while ctx.state.playing:
-        with lock:
-            percent = result["percent"]
-        if percent is None:
-            continue
-        placeholder.subheader(f'{percent}%')
-        # print(percent)
-    #         placeholder.empty()
-    placeholder.subheader("0%")
+    # while ctx.state.playing:
+    #     with lock:
+    #         percent = result["percent"]
+    #     if percent is None:
+    #         continue
+    #     placeholder.subheader(f'{percent}%')
+    #     # print(percent)
+    # #         placeholder.empty()
+    # placeholder.subheader("0%")
 
 # テスト表示
 # image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
