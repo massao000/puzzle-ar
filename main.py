@@ -66,6 +66,16 @@ with st.sidebar:
         "Choose a shipping method",
         ("Standard (5-15 days)", "Express (2-5 days)")
     )
+    
+    with open("マーカbig.pdf", "rb") as pdf_file:
+        PDFbyte = pdf_file.read()
+
+    st.download_button(
+        label="ARマーカー",
+        data=PDFbyte,
+        file_name="ARmarker.pdf",
+        mime='application/octet-stream')
+    
     # マーカーに表示する画像
     if st.button('random'):
         try:
@@ -95,18 +105,9 @@ webrtc_streamer(
 st.title('Streamlit App Test')
 st.write('Hello world')
 
-with open("マーカbig.pdf", "rb") as pdf_file:
-    PDFbyte = pdf_file.read()
-
-st.download_button(
-    label="ARマーカー",
-    data=PDFbyte,
-    file_name="ARmarker.pdf",
-    mime='application/octet-stream')
-
 # テスト表示
-image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
-st.image(image, caption='Sunrise by the mountains')
+# image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
+# st.image(image, caption='Sunrise by the mountains')
 
 # tes
 #Class
