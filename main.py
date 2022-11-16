@@ -95,7 +95,7 @@ st.download_button(
 
 # テスト表示
 image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
-st.image(img, caption='Sunrise by the mountains')
+st.image(image, caption='Sunrise by the mountains')
 
 
 # tes
