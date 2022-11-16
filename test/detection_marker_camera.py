@@ -69,7 +69,7 @@ def comparison(ori_img, img):
 
     # ヒストグラムした画像を比較
     # print(cv2.compareHist(image1_hist, image2_hist, 0))
-    return cv2.compareHist(image1_hist, image2_hist, 0)
+    return round(cv2.compareHist(image1_hist, image2_hist, 0), 4)
 
 def trimming(img):
     """画像の無駄な部分を削除
@@ -306,14 +306,18 @@ while True:
     frame3 = trimming(frame2)
     cv2.imshow('test2', frame3)
     
-    cv2.imshow('test', frame)
-    
     com = comparison(comparison_img, frame3)
-    
+    # print(com)
     if  com > 0.99:
+        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 4, (255, 10, 10), 5, cv2.LINE_AA)
         print('ok')
     else:
+        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 5, cv2.LINE_AA)
         print('ng')
+    
+    cv2.imshow('test', frame)
+    
+    
     
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
