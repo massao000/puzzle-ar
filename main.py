@@ -22,8 +22,10 @@ aruco = cv2.aruco
 
 # カメラメイン処理
 def video_frame_callback(frame):
+    test = "test"
+    
     frame = frame.to_ndarray(format = 'bgr24')
-
+    
     # camera = cv2.VideoCapture(0)
     
     #　マーカの検出
@@ -93,6 +95,7 @@ st.download_button(
     file_name="ARmarker.pdf",
     mime='application/octet-stream')
 
+st.write(test)
 # テスト表示
 image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
 st.image(image, caption='Sunrise by the mountains')
