@@ -59,19 +59,30 @@ def video_frame_callback(frame):
 
     return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
-# マーカーに表示する画像
-if st.button('random'):
-    try:
-        img = cv2.imread("imgs/2022-10-30_024439-Trinart-characters.png")
-        img = imgCut(img)
-    except:
-        pass
-else:
-    try:
-        img = cv2.imread("imgs/2022-10-30_024439-Trinart-characters.png")
-        img = imgCut(img)
-    except:
-        pass
+
+# Using "with" notation
+with st.sidebar:
+    add_radio = st.radio(
+        "Choose a shipping method",
+        ("Standard (5-15 days)", "Express (2-5 days)")
+    )
+    # マーカーに表示する画像
+    if st.button('random'):
+        try:
+            img = cv2.imread("imgs/2022-10-30_024439-Trinart-characters.png")
+            img = imgCut(img)
+        except:
+            pass
+    else:
+        try:
+            img = cv2.imread("imgs/2022-10-30_024439-Trinart-characters.png")
+            img = imgCut(img)
+        except:
+            pass
+        
+    # テスト表示
+    image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
+    st.image(image, caption='Sunrise by the mountains')
 
 webrtc_streamer(
     key="example", 
@@ -96,19 +107,6 @@ st.download_button(
 # テスト表示
 image = Image.open('imgs/2022-10-30_024439-Trinart-characters.png')
 st.image(image, caption='Sunrise by the mountains')
-
-# Using object notation
-add_selectbox = st.sidebar.selectbox(
-    "How would you like to be contacted?",
-    ("Email", "Home phone", "Mobile phone")
-)
-
-# Using "with" notation
-with st.sidebar:
-    add_radio = st.radio(
-        "Choose a shipping method",
-        ("Standard (5-15 days)", "Express (2-5 days)")
-    )
 
 # tes
 #Class
