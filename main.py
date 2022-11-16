@@ -86,10 +86,14 @@ st.write('Hello world')
 with open("マーカbig.pdf", "rb") as pdf_file:
     PDFbyte = pdf_file.read()
 
-st.download_button(label="ARマーカー",
-                    data=PDFbyte,
-                    file_name="ARmarker.pdf",
-                    mime='application/octet-stream')
+st.download_button(
+    label="ARマーカー",
+    data=PDFbyte,
+    file_name="ARmarker.pdf",
+    mime='application/octet-stream')
+
+st.image(img, caption='Sunrise by the mountains')
+
 
 # tes
 #Class
