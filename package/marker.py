@@ -64,7 +64,7 @@ def comparison(ori_img, img):
 
     # ヒストグラムした画像を比較
     # print(cv2.compareHist(image1_hist, image2_hist, 0))
-    return cv2.compareHist(image1_hist, image2_hist, 0)
+    return round(cv2.compareHist(image1_hist, image2_hist, 0), 4)
 
 def trimming(img):
     """画像の無駄な部分を削除
