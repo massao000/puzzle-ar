@@ -162,7 +162,7 @@ class VideoProcessor:
         # https://note.nkmk.me/python-opencv-hconcat-vconcat-np-tile/
         return cv2.vconcat([cv2.hconcat(im_list_h) for im_list_h in im_list_2d])
 
-    def imgCut(self, img, rows=2, cols=2):
+    def imgCut(self, img, rows, cols):
         """画像の分割　シャッフル
 
         Args:
@@ -176,7 +176,7 @@ class VideoProcessor:
         # chunks = [ chunk for row_img in np.array_split(img, rows, axis=0) for chunk in np.array_split(row_img, cols, axis=1) ]
         # chunks = [ randomRotate(chunk) for row_img in np.array_split(img, rows, axis=0) for chunk in np.array_split(row_img, cols, axis=1) ]
         # 画像のカット
-        chunks = [ chunk for row_img in np.array_split(img, self.rows, axis=0) for chunk in np.array_split(row_img, self.cols, axis=1) ]
+        chunks = [ chunk for row_img in np.array_split(img, rows, axis=0) for chunk in np.array_split(row_img, cols, axis=1) ]
         chunks_random = [ self.randomRotate(i) for i in chunks]
         
         # 余白の追加
@@ -184,16 +184,60 @@ class VideoProcessor:
         # chunks_whitespace = [ cv2.copyMakeBorder(i, 5, 5, 5, 5, cv2.BORDER_CONSTANT, value=[0,0,0]) for i in chunks ]
         
         # 元画像に余白を追加
+        # rowsとcolsを比較して数字が小さい方を採用するように
+        # したら縦長も対応できる
+        # print(f'rows : {self.rows}')
+        # print(f'cols : {self.cols}')
+            
+        # if self.rows < self.cols:
+        #     print('OK')
+        #     start = 0
+        #     num = self.rows
+        #     two_list = []
+        #     for i in range(self.rows):
+        #         l = []
+        #         for j in range(start, num):
+        #             l.append(chunks_whitespace[j])
+        #         two_list.append(l)
+        #         start += self.rows
+        #         num += self.rows
+        # else:
+        #     print('else')
+        #     start = 0
+        #     num = self.cols
+        #     two_list = []
+        #     for i in range(self.cols):
+        #         l = []
+        #         for j in range(start, num):
+        #             l.append(chunks_whitespace[j])
+        #         two_list.append(l)
+        #         start += self.cols
+        #         num += self.cols
+        
+        if rows < cols:
+            si = rows
+        else:
+            si = cols
         start = 0
-        num = self.rows
+        num = si
         two_list = []
-        for i in range(self.rows):
+        for i in range(si):
             l = []
             for j in range(start, num):
                 l.append(chunks_whitespace[j])
             two_list.append(l)
-            start += self.rows
-            num += self.rows
+            start += si
+            num += si
+        # start = 0
+        # num = self.rows
+        # two_list = []
+        # for i in range(self.rows):
+        #     l = []
+        #     for j in range(start, num):
+        #         l.append(chunks_whitespace[j])
+        #     two_list.append(l)
+        #     start += self.rows
+        #     num += self.rows
         # 比較用画像
         comparison_img = self.concat_tile(two_list)
 
