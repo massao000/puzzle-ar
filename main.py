@@ -26,7 +26,7 @@ is_random_img = False
 
 option = st.sidebar.selectbox(
     label = "パズルサイズ",
-    options = ["2x2", "3x3"]
+    options = ["2x2", "3x3", "4x4", "5x5", "3x2"]
 )
 
 if option == "2x2":
@@ -35,7 +35,23 @@ if option == "2x2":
 elif option == "3x3":
     video.rows, video.cols = 3, 3
     dsize=(500, 500)
-    
+elif option == "4x4":
+    video.rows, video.cols = 4, 4
+    dsize=(500, 500)
+elif option == "5x5":
+    video.rows, video.cols = 5, 5
+    dsize=(500, 500)
+elif option == "3x2":
+    video.rows, video.cols = 2, 3
+    video.imgs = glob.glob(f'imgs/2-1/*')
+    dsize=(750, 500)
+
+# 未実装
+st.sidebar.radio(
+    label = "むずかしさ",
+    options = ["かんたん", "ふつう", "むずかしい"]
+)
+
 with open("マーカbig.pdf", "rb") as pdf_file:
     PDFbyte = pdf_file.read()
 
@@ -48,14 +64,14 @@ st.sidebar.download_button(
 
 placeholder_che = st.empty()
 # 
-agree = st.sidebar.checkbox('ARマーカーで画像のランダム抽選', key='q')
+agree = st.sidebar.button('ARマーカーで画像のランダム抽選', key='q')
 
 if not agree:
     randm_img = st.sidebar.button('単発ランダム抽選')
     if randm_img:
         try:
             video.original_img = cv2.imread(random.choice(video.imgs))
-            video.original_img = cv2.resize(video.original_img, dsize=(500, 500))
+            video.original_img = cv2.resize(video.original_img, dsize=dsize)
             # print(video.original_img)
             # 元画像, 比較画像
             video.img, video.comparison_img = video.imgCut(video.original_img, video.rows, video.cols)
@@ -65,13 +81,14 @@ if not agree:
     else:
         try:
             video.original_img = cv2.imread(random.choice(video.imgs))
-            video.original_img = cv2.resize(video.original_img, dsize=(500, 500))
+            video.original_img = cv2.resize(video.original_img, dsize=dsize)
             # 元画像, 比較画像
             video.img, video.comparison_img = video.imgCut(video.original_img, video.rows, video.cols)
         except:
             pass
 else:
-    st.sidebar.info('マーカーでのランダム抽選中です')
+    st.sidebar.button('OFF')
+    st.sidebar.info('マーカー50番でのランダム抽選です')
 
 # カメラメイン処理
 def video_frame_callback(frame):
@@ -140,13 +157,25 @@ def video_frame_callback(frame):
                     frame, frame2 = video.overlapImg(video.img[8], pts_dst, frame, frame2)
                 elif ids[i] == 9 and len(video.img) >= 9:
                     frame, frame2 = video.overlapImg(video.img[9], pts_dst, frame, frame2)
+                elif ids[i] == 10 and len(video.img) >= 10:
+                    frame, frame2 = video.overlapImg(video.img[10], pts_dst, frame, frame2)
+                elif ids[i] == 11 and len(video.img) >= 11:
+                    frame, frame2 = video.overlapImg(video.img[11], pts_dst, frame, frame2)
+                elif ids[i] == 12 and len(video.img) >= 12:
+                    frame, frame2 = video.overlapImg(video.img[12], pts_dst, frame, frame2)
+                elif ids[i] == 13 and len(video.img) >= 13:
+                    frame, frame2 = video.overlapImg(video.img[13], pts_dst, frame, frame2)
+                elif ids[i] == 14 and len(video.img) >= 14:
+                    frame, frame2 = video.overlapImg(video.img[14], pts_dst, frame, frame2)
+                elif ids[i] == 15 and len(video.img) >= 15:
+                    frame, frame2 = video.overlapImg(video.img[15], pts_dst, frame, frame2)
             except:
                 pass
             
     frame3 = video.trimming(frame2)
-    com = video.comparison(video.comparison_img, frame3)
+    com = video.comparison(video.comparison_img, frame3, dsize)
     
-    if  com > 0.997:
+    if  com > 0.9985:
         # フチ
         cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 8, cv2.LINE_AA)
         # 文字
@@ -192,23 +221,3 @@ if agree and ctx.state.playing:
             break
 else:
     placeholder.image(video.cv2pil(video.original_img), caption='元画像')
-
-# tes
-#Class
-# class VideoProcessor:
-#     def recv(self,frame):
-
-#         img = frame.to_ndarray(format = 'bgr24')
-#         img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-#         img = av.VideoFrame.from_ndarray(img, format='gray')
-
-#         return img
-# class VideoProcessor:
-#     def recv(self,frame):
-
-#         img = frame.to_ndarray(format = 'bgr24')
-#         img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
-
-#         return av.VideoFrame.from_ndarray(img, format="bgr24")
-
-# webrtc_streamer(key='example2', video_processor_factory=VideoProcessor)
