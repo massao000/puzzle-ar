@@ -15,7 +15,7 @@ class VideoProcessor():
     aruco = cv2.aruco
     
     # マーカーに表示する画像
-    imgs = glob.glob('imgs/*')
+    imgs = glob.glob(f'imgs/1-1/*')
 
     original_img = cv2.imread(random.choice(imgs))
     original_img = cv2.resize(original_img, dsize=(500, 500))
@@ -72,18 +72,18 @@ class VideoProcessor():
         new_image = Image.fromarray(new_image)
         return new_image
 
-    def comparison(self, ori_img, img):
+    def comparison(self, ori_img, img, img_size):
         """画像の比較
 
         Args:
             ori_img (_type_): オリジナル画像
             img (_type_): _description_
-
+            img_size (_type_): 画像サイズ
         Returns:
             _type_: _description_
         """
         # https://office54.net/python/module/opencv-numpy-compare
-        img_size = (500, 500)
+        # img_size = (500, 500)
         
         # 画像をリサイズする
         image1 = cv2.resize(ori_img, img_size)
@@ -175,23 +175,25 @@ class VideoProcessor():
         """
         # chunks = [ chunk for row_img in np.array_split(img, rows, axis=0) for chunk in np.array_split(row_img, cols, axis=1) ]
         # chunks = [ randomRotate(chunk) for row_img in np.array_split(img, rows, axis=0) for chunk in np.array_split(row_img, cols, axis=1) ]
-        chunks = [ chunk for row_img in np.array_split(img, rows, axis=0) for chunk in np.array_split(row_img, cols, axis=1) ]
+        # 画像のカット
+        chunks = [ chunk for row_img in np.array_split(img, self.rows, axis=0) for chunk in np.array_split(row_img, self.cols, axis=1) ]
         chunks_random = [ self.randomRotate(i) for i in chunks]
         
         # 余白の追加
         chunks_whitespace = [ cv2.copyMakeBorder(i, 7, 7, 7, 7, cv2.BORDER_CONSTANT, value=[0,0,0]) for i in chunks ]
+        # chunks_whitespace = [ cv2.copyMakeBorder(i, 5, 5, 5, 5, cv2.BORDER_CONSTANT, value=[0,0,0]) for i in chunks ]
         
         # 元画像に余白を追加
         start = 0
-        num = rows
+        num = self.rows
         two_list = []
-        for i in range(rows):
+        for i in range(self.rows):
             l = []
             for j in range(start, num):
                 l.append(chunks_whitespace[j])
             two_list.append(l)
-            start += rows
-            num += rows
+            start += self.rows
+            num += self.rows
         # 比較用画像
         comparison_img = self.concat_tile(two_list)
 
