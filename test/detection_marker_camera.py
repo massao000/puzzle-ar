@@ -220,23 +220,25 @@ camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
 
 # マーカーに表示する画像\
 imgs = [
-    "imgs/0001_kaguramea.png",
-    # "imgs/71y6cwHTrsL._AC_SL1418_.jpg",
-    # "20211015.jpg",
-    "imgs/2022-10-30_024439-Trinart-characters.png",
-    "imgs/2022-10-30_005405-waifu.png",
-    "imgs/2022-10-29_230626-waifu.png",
+    # "imgs/0001_kaguramea.png",
+    # # "imgs/71y6cwHTrsL._AC_SL1418_.jpg",
+    # # "20211015.jpg",
+    # "imgs/2022-10-30_024439-Trinart-characters.png",
+    # "imgs/2022-10-30_005405-waifu.png",
+    # "imgs/2022-10-29_230626-waifu.png",
+    r"imgs\2-1\00001_steps-50_scale-7.5_720x448_seed-8939454022723035.png"
     ]
 
 # print(random.choice(imgs))
 
 original_img = cv2.imread(random.choice(imgs))
-original_img = cv2.resize(original_img, dsize=(500, 500))
+dsize=(750,500)
+original_img = cv2.resize(original_img, dsize=dsize)
 
 cv2.imshow('img', original_img)
 
 # カットサイズ
-rows, cols = 2, 2
+rows, cols = 2, 3
 
 img, comparison_img = imgCut(original_img, rows, cols)
 max_m = 0
@@ -261,7 +263,7 @@ while True:
         # 特定のマーカーが読み込まれたら画像のチェンジ
         if 10 in ids:
             original_img = cv2.imread(random.choice(imgs))
-            original_img = cv2.resize(original_img, dsize=(500, 500))
+            original_img = cv2.resize(original_img, dsize=dsize)
             img, comparison_img = imgCut(original_img, rows, cols)
             cv2.imshow('img', original_img)
         
@@ -309,11 +311,16 @@ while True:
     com = comparison(comparison_img, frame3)
     # print(com)
     if  com > 0.99:
-        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 4, (255, 10, 10), 5, cv2.LINE_AA)
-        print('ok')
+        # フチ
+        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 8, cv2.LINE_AA)
+        # 文字
+        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 10, 10), 3, cv2.LINE_AA)
     else:
-        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 4, (255, 255, 255), 5, cv2.LINE_AA)
-        print('ng')
+        # フチ
+        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 8, cv2.LINE_AA)
+        # 文字
+        cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 3, cv2.LINE_AA)
+    
     
     cv2.imshow('test', frame)
     
