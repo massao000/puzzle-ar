@@ -26,7 +26,7 @@ is_random_img = False
 
 option = st.sidebar.selectbox(
     label = "パズルサイズ",
-    options = ["2x2", "3x3", "4x4", "5x5", "3x2"]
+    options = ["2x2", "3x3", "4x4", "5x5", "3x2", "4x3", "5x4", "2x3"]
 )
 
 if option == "2x2":
@@ -41,10 +41,24 @@ elif option == "4x4":
 elif option == "5x5":
     video.rows, video.cols = 5, 5
     dsize=(500, 500)
-elif option == "3x2":
+elif option == "3x2": # 横長 2:1
     video.rows, video.cols = 2, 3
     video.imgs = glob.glob(f'imgs/2-1/*')
     dsize=(750, 500)
+elif option == "4x3": # 横長 2:1 できない
+    video.rows, video.cols = 3, 4
+    video.imgs = glob.glob(f'imgs/2-1/*')
+    dsize=(750, 500)
+elif option == "5x4": # 横長 2:1
+    video.rows, video.cols = 4, 5
+    video.imgs = glob.glob(f'imgs/2-1/*')
+    dsize=(750, 500)
+elif option == "2x3": # 縦長 1:2 処理の未実装
+    video.rows, video.cols = 3, 2
+    video.imgs = glob.glob(f'imgs/1-2/*')
+    # dsize=(460, 900)
+    dsize=(358, 760)
+
 
 # 未実装
 st.sidebar.radio(
