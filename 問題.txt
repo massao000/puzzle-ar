@@ -4,3 +4,37 @@
 
 
 checkボックスをoffに出来るようにする
+
+解決
+concat_tileで起きてたエラー(rror
+OpenCV(4.6.0) D:\a\opencv-python\opencv-python\opencv\modules\core\src\matrix_operations.cpp:67: error: (-215:Assertion failed) src[i].dims <= 2 && src[i].rows == src[0].rows && src[i].type() == src[0].type() in function 'cv::hconcat')
+
+imgCut関数内の余白追加の処理の変更でエラー回避
+
+変更前
+# 元画像に余白を追加
+start = 0
+num = self.rows
+two_list = []
+for i in range(self.rows):
+    l = []
+    for j in range(start, num):
+        l.append(chunks_whitespace[j])
+    two_list.append(l)
+    start += self.rows
+    num += self.rows
+
+変更後
+# 元画像に余白を追加
+start = 0
+num = cols
+two_list = []
+for i in range(rows):
+    l = []
+    for j in range(start, num):
+        l.append(chunks_whitespace[j])
+    two_list.append(l)
+    start += cols
+    num += cols
+
+numとstartをcolsに変更したら無事に動いた
