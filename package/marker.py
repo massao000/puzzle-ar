@@ -16,15 +16,15 @@ class VideoProcessor:
     
     # マーカーに表示する画像
     imgs = glob.glob(f'imgs/1-1/*')
-
     original_img = cv2.imread(random.choice(imgs))
     original_img = cv2.resize(original_img, dsize=(500, 500))
 
-    # cv2.imshow('img', original_img)
-
     # カットサイズ
-    rows = 2
-    cols = 2
+    rows = 2 #行数
+    cols = 2 #列数
+    
+    # 難易度
+    level = 0
 
     img = None
     comparison_img = None
@@ -141,13 +141,17 @@ class VideoProcessor:
         rotate_number = [0, 1, 2, 3]
         rando = random.choice(rotate_number)
         
-        if (rando == 1):
+        if (rando == 1 and self.level >= 1):
+            # 時計回りに90度
             return cv2.rotate(cat_img, cv2.ROTATE_90_CLOCKWISE)
-        elif (rando == 2):
+        elif (rando == 2 and self.level >= 1):
+            # 反時計回りに90度
             return cv2.rotate(cat_img, cv2.ROTATE_90_COUNTERCLOCKWISE)
-        elif (rando == 3):
+        elif (rando == 3 and self.level >= 2):
+            # 180度
             return cv2.rotate(cat_img, cv2.ROTATE_180)
         else:
+            # そのまま
             return cat_img
 
     def concat_tile(self, im_list_2d):
@@ -184,60 +188,17 @@ class VideoProcessor:
         # chunks_whitespace = [ cv2.copyMakeBorder(i, 5, 5, 5, 5, cv2.BORDER_CONSTANT, value=[0,0,0]) for i in chunks ]
         
         # 元画像に余白を追加
-        # rowsとcolsを比較して数字が小さい方を採用するように
-        # したら縦長も対応できる
-        # print(f'rows : {self.rows}')
-        # print(f'cols : {self.cols}')
-            
-        # if self.rows < self.cols:
-        #     print('OK')
-        #     start = 0
-        #     num = self.rows
-        #     two_list = []
-        #     for i in range(self.rows):
-        #         l = []
-        #         for j in range(start, num):
-        #             l.append(chunks_whitespace[j])
-        #         two_list.append(l)
-        #         start += self.rows
-        #         num += self.rows
-        # else:
-        #     print('else')
-        #     start = 0
-        #     num = self.cols
-        #     two_list = []
-        #     for i in range(self.cols):
-        #         l = []
-        #         for j in range(start, num):
-        #             l.append(chunks_whitespace[j])
-        #         two_list.append(l)
-        #         start += self.cols
-        #         num += self.cols
-        
-        if rows < cols:
-            si = rows
-        else:
-            si = cols
+        # 四角形長方形に対応済み
         start = 0
-        num = si
+        num = self.cols
         two_list = []
-        for i in range(si):
+        for i in range(self.rows):
             l = []
             for j in range(start, num):
                 l.append(chunks_whitespace[j])
             two_list.append(l)
-            start += si
-            num += si
-        # start = 0
-        # num = self.rows
-        # two_list = []
-        # for i in range(self.rows):
-        #     l = []
-        #     for j in range(start, num):
-        #         l.append(chunks_whitespace[j])
-        #     two_list.append(l)
-        #     start += self.rows
-        #     num += self.rows
+            start += self.cols
+            num += self.cols
         # 比較用画像
         comparison_img = self.concat_tile(two_list)
 
