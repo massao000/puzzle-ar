@@ -28,7 +28,7 @@ option = st.sidebar.selectbox(
     label = "パズルサイズ 横x縦",
     options = ["2x2", "3x3", "4x4", "5x5", "3x2", "4x3", "5x4", "2x3", "3x4"]
 )
-
+# 7x7までいける
 if option == "2x2":
     video.rows, video.cols = 2, 2
     dsize=(500, 500)
@@ -49,7 +49,7 @@ elif option == "4x3": # 横長 2:1
     video.rows, video.cols = 3, 4
     video.imgs = glob.glob(f'imgs/2-1/*')
     dsize=(750, 500)
-elif option == "5x4": # 横長 2:1 足りない
+elif option == "5x4": # 横長 2:1
     video.rows, video.cols = 4, 5
     video.imgs = glob.glob(f'imgs/2-1/*')
     dsize=(750, 500)
@@ -287,6 +287,8 @@ st.write(f"""
 マーカーの`marker-0`をかざすと画像の一部が表示されます。
 
 あとは、サイドバーから、パズルサイズを変更や、むずかしさの変更、画像抽選などして遊びます。
+
+あっているかはパーセンテージが青くなったら一致していることになります。
 
 ## サイドバーについて
 
