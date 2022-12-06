@@ -25,7 +25,7 @@ video = VideoProcessor()
 is_random_img = False
 
 option = st.sidebar.selectbox(
-    label = "パズルサイズ 横x縦",
+    label = "パズルサイズ (横x縦)",
     options = ["2x2", "3x3", "4x4", "5x5", "3x2", "4x3", "5x4", "2x3", "3x4"]
 )
 # 7x7までいける
