@@ -107,12 +107,11 @@ else:
     except:
         pass
 
-dictionary = video.aruco.Dictionary_get(video.aruco.DICT_5X5_50)
+# dictionary = video.aruco.Dictionary_get(video.aruco.DICT_5X5_50)
 # カメラメイン処理
 def video_frame_callback(frame):
     global is_random_img
     # global agree
-    global dictionary
     
     frame = frame.to_ndarray(format = 'bgr24')
     
@@ -124,7 +123,7 @@ def video_frame_callback(frame):
     # frame[0:h, 0:w] = self.original_img
     
     #　マーカの検出
-    # dictionary = video.aruco.Dictionary_get(video.aruco.DICT_5X5_50)
+    dictionary = video.aruco.Dictionary_get(video.aruco.DICT_5X5_50)
     # dictionary = video.aruco.getPredefinedDictionary(video.aruco.DICT_5X5_50)
     
     # corners:マーカの角 ids:マーカID
@@ -273,6 +272,8 @@ st.download_button(
 
 st.write(f"""
 # 遊び方
+
+※ここで使用している画像は全て、画像生成AIを使い作成したものになります。
 
 ### PC推奨
 
