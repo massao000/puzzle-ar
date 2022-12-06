@@ -14,8 +14,8 @@ import glob
 from package import *
 
 st.set_page_config(
-    page_title="AR puzzle",
-    page_icon="🧊",
+    page_title="infinity AR puzzle",
+    # page_icon="🧊",
     layout="wide"
 )
 
