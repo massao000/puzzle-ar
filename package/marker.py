@@ -7,6 +7,43 @@ import glob
 # https://elsammit-beginnerblg.hatenablog.com/entry/2020/10/10/125246
 # https://amdlaboratory.com/amdblog/opencv%E3%81%A8aruco%E3%83%9E%E3%83%BC%E3%82%AB%E3%83%BC%E3%82%92%E5%88%A9%E7%94%A8%E3%81%97%E3%81%9F%E7%94%BB%E5%83%8F%E3%83%9E%E3%83%83%E3%83%94%E3%83%B3%E3%82%B0/
 
+# https://qiita.com/derodero24/items/f22c22b22451609908ee
+def pil2cv(image):
+    """ PIL型 -> OpenCV型 
+    
+    Args:
+        image (_type_): 変換画像
+
+    Returns:
+        _type_: _description_
+    """
+    new_image = np.array(image, dtype=np.uint8)
+    if new_image.ndim == 2:  # モノクロ
+        pass
+    elif new_image.shape[2] == 3:  # カラー
+        new_image = cv2.cvtColor(new_image, cv2.COLOR_RGB2BGR)
+    elif new_image.shape[2] == 4:  # 透過
+        new_image = cv2.cvtColor(new_image, cv2.COLOR_RGBA2BGRA)
+    return new_image
+
+def cv2pil(image):
+    """ OpenCV型 -> PIL型 
+    
+    Args:
+        image (_type_): 変換画像
+
+    Returns:
+        _type_: _description_
+    """
+    new_image = image.copy()
+    if new_image.ndim == 2:  # モノクロ
+        pass
+    elif new_image.shape[2] == 3:  # カラー
+        new_image = cv2.cvtColor(new_image, cv2.COLOR_BGR2RGB)
+    elif new_image.shape[2] == 4:  # 透過
+        new_image = cv2.cvtColor(new_image, cv2.COLOR_BGRA2RGBA)
+    new_image = Image.fromarray(new_image)
+    return new_image
 
 class VideoProcessor:
     # https://elsammit-beginnerblg.hatenablog.com/entry/2020/10/10/125246
@@ -15,9 +52,10 @@ class VideoProcessor:
     aruco = cv2.aruco
     
     # マーカーに表示する画像
-    imgs = glob.glob(f'imgs/1-1/*')
-    original_img = cv2.imread(random.choice(imgs))
-    original_img = cv2.resize(original_img, dsize=(500, 500))
+    # imgs = glob.glob(f'imgs/1-1/*')
+    # imgs = ''
+    # original_img = pil2cv(Image.open(random.choice(imgs)))
+    # original_img = cv2.resize(original_img, dsize=(500, 500))
 
     # カットサイズ
     rows = 2 #行数
@@ -29,48 +67,10 @@ class VideoProcessor:
     img = None
     comparison_img = None
     
-    def __init__(self):      
+    # def __init__(self):
         # 元画像, 比較画像
-        self.img, self.comparison_img = self.imgCut(self.original_img, self.rows, self.cols)
-        self.max_m = 0
-
-# https://qiita.com/derodero24/items/f22c22b22451609908ee
-    def pil2cv(self, image):
-        """ PIL型 -> OpenCV型 
-        
-        Args:
-            image (_type_): 変換画像
-
-        Returns:
-            _type_: _description_
-        """
-        new_image = np.array(image, dtype=np.uint8)
-        if new_image.ndim == 2:  # モノクロ
-            pass
-        elif new_image.shape[2] == 3:  # カラー
-            new_image = cv2.cvtColor(new_image, cv2.COLOR_RGB2BGR)
-        elif new_image.shape[2] == 4:  # 透過
-            new_image = cv2.cvtColor(new_image, cv2.COLOR_RGBA2BGRA)
-        return new_image
-
-    def cv2pil(self, image):
-        """ OpenCV型 -> PIL型 
-        
-        Args:
-            image (_type_): 変換画像
-
-        Returns:
-            _type_: _description_
-        """
-        new_image = image.copy()
-        if new_image.ndim == 2:  # モノクロ
-            pass
-        elif new_image.shape[2] == 3:  # カラー
-            new_image = cv2.cvtColor(new_image, cv2.COLOR_BGR2RGB)
-        elif new_image.shape[2] == 4:  # 透過
-            new_image = cv2.cvtColor(new_image, cv2.COLOR_BGRA2RGBA)
-        new_image = Image.fromarray(new_image)
-        return new_image
+        # self.img, self.comparison_img = self.imgCut(self.original_img, self.rows, self.cols)
+        # self.max_m = 0
 
     def comparison(self, ori_img, img, img_size):
         """画像の比較
@@ -107,7 +107,7 @@ class VideoProcessor:
             _type_: _description_
         """
         # https://qiita.com/derodero24/items/f22c22b22451609908ee
-        new_image = self.cv2pil(img)
+        new_image = cv2pil(img)
         
         # https://water2litter.net/rum/post/python_crop_margin/
         # 背景色の抽出
@@ -124,7 +124,7 @@ class VideoProcessor:
 
         # https://qiita.com/derodero24/items/f22c22b22451609908ee
         # cv2_img = np.array(crop_img, dtype=np.uint8)
-        cv2_img = self.pil2cv(crop_img)
+        cv2_img = pil2cv(crop_img)
         
         return cv2_img
 
