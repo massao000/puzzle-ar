@@ -24,46 +24,61 @@ video = VideoProcessor()
 # ARマーカーのランダムができるか
 is_random_img = False
 
+up_img = st.sidebar.file_uploader("オリジナル画像", type=['png', 'jpg'])
+
 option = st.sidebar.selectbox(
     label = "パズルサイズ (横x縦)",
     options = ["2x2", "3x3", "4x4", "5x5", "3x2", "4x3", "5x4", "2x3", "3x4"]
 )
 # 7x7までいける
-if option == "2x2":
-    video.rows, video.cols = 2, 2
+# print(imgs)
+if up_img:
+    imgs = pil2cv(Image.open(up_img))
     dsize=(500, 500)
-elif option == "3x3":
-    video.rows, video.cols = 3, 3
-    dsize=(500, 500)
-elif option == "4x4":
-    video.rows, video.cols = 4, 4
-    dsize=(500, 500)
-elif option == "5x5":
-    video.rows, video.cols = 5, 5
-    dsize=(500, 500)
-elif option == "3x2": # 横長 2:1
-    video.rows, video.cols = 2, 3
-    video.imgs = glob.glob(f'imgs/2-1/*')
-    dsize=(750, 500)
-elif option == "4x3": # 横長 2:1
-    video.rows, video.cols = 3, 4
-    video.imgs = glob.glob(f'imgs/2-1/*')
-    dsize=(750, 500)
-elif option == "5x4": # 横長 2:1
-    video.rows, video.cols = 4, 5
-    video.imgs = glob.glob(f'imgs/2-1/*')
-    dsize=(750, 500)
-elif option == "2x3": # 縦長 1:2
-    video.rows, video.cols = 3, 2
-    video.imgs = glob.glob(f'imgs/1-2/*')
-    # dsize=(460, 900)
-    dsize=(358, 760)
-elif option == "3x4": # 縦長 1:2
-    video.rows, video.cols = 4, 3
-    video.imgs = glob.glob(f'imgs/1-2/*')
-    # dsize=(460, 900)
-    dsize=(358, 760)
-
+    original_img = cv2.resize(imgs, dsize=dsize)
+    video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
+else:
+    if option == "2x2":
+        video.rows, video.cols = 2, 2
+        imgs = glob.glob(f'imgs/1-1/*')
+        dsize=(500, 500)
+    elif option == "3x3":
+        video.rows, video.cols = 3, 3
+        imgs = glob.glob(f'imgs/1-1/*')
+        dsize=(500, 500)
+    elif option == "4x4":
+        video.rows, video.cols = 4, 4
+        imgs = glob.glob(f'imgs/1-1/*')
+        dsize=(500, 500)
+    elif option == "5x5":
+        video.rows, video.cols = 5, 5
+        imgs = glob.glob(f'imgs/1-1/*')
+        dsize=(500, 500)
+    elif option == "3x2": # 横長 2:1
+        video.rows, video.cols = 2, 3
+        imgs = glob.glob(f'imgs/2-1/*')
+        dsize=(750, 500)
+    elif option == "4x3": # 横長 2:1
+        video.rows, video.cols = 3, 4
+        imgs = glob.glob(f'imgs/2-1/*')
+        dsize=(750, 500)
+    elif option == "5x4": # 横長 2:1
+        video.rows, video.cols = 4, 5
+        imgs = glob.glob(f'imgs/2-1/*')
+        dsize=(750, 500)
+    elif option == "2x3": # 縦長 1:2
+        video.rows, video.cols = 3, 2
+        imgs = glob.glob(f'imgs/1-2/*')
+        # dsize=(460, 900)
+        dsize=(358, 760)
+    elif option == "3x4": # 縦長 1:2
+        video.rows, video.cols = 4, 3
+        imgs = glob.glob(f'imgs/1-2/*')
+        # dsize=(460, 900)
+        dsize=(358, 760)
+    imgs = pil2cv(Image.open(random.choice(imgs)))
+    original_img = cv2.resize((imgs), dsize=dsize)
+    video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
 
 # 難易度
 level = st.sidebar.radio(
@@ -88,28 +103,40 @@ placeholder_che = st.empty()
 # 
 # agree = st.sidebar.button('ARマーカーで画像のランダム抽選', key='q')
 randm_img = st.sidebar.button('画像抽選')
-if randm_img:
+if up_img:
     try:
-        video.original_img = cv2.imread(random.choice(video.imgs))
-        video.original_img = cv2.resize(video.original_img, dsize=dsize)
-        # print(video.original_img)
+        original_img = pil2cv(Image.open(up_img))
+        original_img = cv2.resize(original_img, dsize=dsize)
+        # print(original_img)
         # 元画像, 比較画像
-        video.img, video.comparison_img = video.imgCut(video.original_img, video.rows, video.cols)
+        video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
         # print(video.img)
     except:
         pass
 else:
-    try:
-        video.original_img = cv2.imread(random.choice(video.imgs))
-        video.original_img = cv2.resize(video.original_img, dsize=dsize)
-        # 元画像, 比較画像
-        video.img, video.comparison_img = video.imgCut(video.original_img, video.rows, video.cols)
-    except:
-        pass
+    if randm_img:
+        try:
+            original_img = cv2.imread(random.choice(imgs))
+            original_img = cv2.resize(original_img, dsize=dsize)
+            # print(original_img)
+            # 元画像, 比較画像
+            video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
+            # print(video.img)
+        except:
+            pass
+    else:
+        try:
+            original_img = cv2.imread(random.choice(imgs))
+            original_img = cv2.resize(original_img, dsize=dsize)
+            # 元画像, 比較画像
+            video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
+        except:
+            pass
 
 # dictionary = video.aruco.Dictionary_get(video.aruco.DICT_5X5_50)
 # カメラメイン処理
 def video_frame_callback(frame):
+    global video
     global is_random_img
     # global agree
     
@@ -136,9 +163,9 @@ def video_frame_callback(frame):
     if np.all(ids != None):
         # 特定のマーカーが読み込まれたら画像のチェンジ
         # if 10 in ids and agree:
-        #     video.original_img = cv2.imread(random.choice(video.imgs))
-        #     video.original_img = cv2.resize(video.original_img, dsize=(500, 500))
-        #     video.img, video.comparison_img = video.imgCut(video.original_img, video.rows, video.cols)
+        #     original_img = cv2.imread(random.choice(imgs))
+        #     original_img = cv2.resize(original_img, dsize=(500, 500))
+        #     video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
         #     is_random_img = True
         # else:
         #     is_random_img = False
@@ -223,11 +250,12 @@ def video_frame_callback(frame):
                     frame, frame2 = video.overlapImg(video.img[32], pts_dst, frame, frame2)
             except:
                 pass
-            
+
     frame3 = video.trimming(frame2)
     com = video.comparison(video.comparison_img, frame3, dsize)
     
-    if  com > 0.9985:
+    if  com > 0.9980:
+    # if  com > 0.9975:
         # フチ
         cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 8, cv2.LINE_AA)
         # 文字
@@ -259,7 +287,10 @@ ctx = webrtc_streamer(
 placeholder = st.sidebar.empty()
 # 正しい画像の表示
 if ctx.state.playing:
-    placeholder.image(video.cv2pil(video.original_img), caption='元画像')
+    if up_img:
+        placeholder.image(up_img, caption='元画像')
+    else:
+        placeholder.image(cv2pil(original_img), caption='元画像')
     
 with open("マーカbig.pdf", "rb") as pdf_file:
     PDFbyte = pdf_file.read()
