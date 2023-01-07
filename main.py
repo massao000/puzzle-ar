@@ -292,7 +292,7 @@ if ctx.state.playing:
     else:
         placeholder.image(cv2pil(original_img), caption='元画像')
     
-with open("マーカbig.pdf", "rb") as pdf_file:
+with open("サンプル.pdf", "rb") as pdf_file:
     PDFbyte = pdf_file.read()
 
 st.download_button(
