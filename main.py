@@ -34,7 +34,18 @@ option = st.sidebar.selectbox(
 # print(imgs)
 if up_img:
     imgs = pil2cv(Image.open(up_img))
-    dsize=(500, 500)
+    height, width, channels = img.shape
+    
+    if height < width:
+        # 2:1
+        dsize=(750, 500)
+    elif height > width:
+        # 1:2
+        dsize=(375, 750)
+    else:
+        # 1:1
+        dsize=(500, 500)
+        
     original_img = cv2.resize(imgs, dsize=dsize)
     video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
 else:
@@ -70,7 +81,8 @@ else:
         video.rows, video.cols = 3, 2
         imgs = glob.glob(f'imgs/1-2/*')
         # dsize=(460, 900)
-        dsize=(358, 760)
+        # dsize=(358, 760)
+        dsize=(375, 750)
     elif option == "3x4": # 縦長 1:2
         video.rows, video.cols = 4, 3
         imgs = glob.glob(f'imgs/1-2/*')
