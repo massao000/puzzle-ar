@@ -34,7 +34,7 @@ option = st.sidebar.selectbox(
 # print(imgs)
 if up_img:
     imgs = pil2cv(Image.open(up_img))
-    height, width, channels = img.shape
+    height, width, channels = imgs.shape
     
     if height < width:
         # 2:1
