@@ -76,8 +76,8 @@ else:
         imgs = glob.glob(f'imgs/1-2/*')
         # dsize=(460, 900)
         dsize=(358, 760)
-    imgs = pil2cv(Image.open(random.choice(imgs)))
-    original_img = cv2.resize((imgs), dsize=dsize)
+    img = pil2cv(Image.open(random.choice(imgs)))
+    original_img = cv2.resize((img), dsize=dsize)
     video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
 
 # 難易度
