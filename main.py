@@ -36,35 +36,38 @@ if up_img:
     imgs = pil2cv(Image.open(up_img))
     height, width, channels = imgs.shape
     
-    if option == "2x2":
-        video.rows, video.cols = 2, 2
-    elif option == "3x3":
-        video.rows, video.cols = 3, 3
-    elif option == "4x4":
-        video.rows, video.cols = 4, 4
-    elif option == "5x5":
-        video.rows, video.cols = 5, 5
-    elif option == "3x2": # 横長 2:1
-        video.rows, video.cols = 2, 3
-    elif option == "4x3": # 横長 2:1
-        video.rows, video.cols = 3, 4
-    elif option == "5x4": # 横長 2:1
-        video.rows, video.cols = 4, 5
-    elif option == "2x3": # 縦長 1:2
-        video.rows, video.cols = 3, 2
-    elif option == "3x4": # 縦長 1:2
-        video.rows, video.cols = 4, 3
-
+    box_size = 0
     if height < width:
         # 2:1
         dsize=(750, 500)
     elif height > width:
         # 1:2
+        box_size = 1
         dsize=(375, 750)
     else:
         # 1:1
+        box_size = 2
         dsize=(500, 500)
         
+    if option == "2x2" and box_size == 2:
+        video.rows, video.cols = 2, 2
+    elif option == "3x3" and box_size == 2:
+        video.rows, video.cols = 3, 3
+    elif option == "4x4" and box_size == 2:
+        video.rows, video.cols = 4, 4
+    elif option == "5x5" and box_size == 2:
+        video.rows, video.cols = 5, 5
+    elif option == "3x2" and box_size == 0: # 横長 2:1
+        video.rows, video.cols = 2, 3
+    elif option == "4x3" and box_size == 0: # 横長 2:1
+        video.rows, video.cols = 3, 4
+    elif option == "5x4" and box_size == 0: # 横長 2:1
+        video.rows, video.cols = 4, 5
+    elif option == "2x3" and box_size == 1: # 縦長 1:2
+        video.rows, video.cols = 3, 2
+    elif option == "3x4" and box_size == 1: # 縦長 1:2
+        video.rows, video.cols = 4, 3
+
     original_img = cv2.resize(imgs, dsize=dsize)
     video.img, video.comparison_img = video.imgCut(original_img, video.rows, video.cols)
 else:
