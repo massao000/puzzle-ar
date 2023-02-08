@@ -1,0 +1,26 @@
+.venv/
+マーカ.afdesign
+del/
+test/
+main copy.py
+main_class.py
+package/marker copy.py
+package/markerclass.py
+マーカ-all.pdf
+マーカ1-12.png
+マーカbig - コピー.afdesign
+マーカbig.afdesign
+マーカbig2.afdesign
+マーカーall2.pdf
+マーカーall3.pdf
+マーカーall4.pdf
+マーカーサンプル.afdesign
+package/__pycache__/__init__.cpython-39.pyc
+package/__pycache__/marker.cpython-39.pyc
+package/__pycache__/markerclass.cpython-39.pyc
+package/__pycache__/markerclass2.cpython-39.pyc
+test/detection_marker_camera.py
+requirements copy.txt
+test/detection_marker_camera.py
+マーカ1-12.png
+marker/
