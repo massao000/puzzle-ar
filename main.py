@@ -30,6 +30,11 @@ option = st.sidebar.selectbox(
     label = "パズルサイズ (横x縦)",
     options = ["2x2", "3x3", "4x4", "5x5", "3x2", "4x3", "5x4", "2x3", "3x4"]
 )
+
+option_rotate = st.sidebar.selectbox(
+    label = "カメラの読み取り向き",
+    options = ["上下左右反転", "デフォルト"]
+)
 # 7x7までいける
 # print(imgs)
 if up_img:
@@ -164,11 +169,63 @@ else:
         except:
             pass
 
+st.write(f"""
+# 遊び方
+
+※ここで使用している画像は全て、画像生成AIを使い作成したものになります。
+
+### PC推奨
+
+以下のものを準備
+* ARマーカー(ARマーカーダウンロードをクリック)
+* カメラ
+
+`赤いstartボタン`を押すし、しばらく待ちます。
+
+カメラの映像が出力されます。
+
+マーカーの`marker-0`をかざすと画像の一部が表示されます。
+
+あとは、サイドバーから、パズルサイズを変更や、むずかしさの変更、画像抽選などして遊びます。
+
+あっているかはパーセンテージが青くなったら一致していることになります。
+
+## サイドバーについて
+
+### パズルサイズ 横x縦
+
+|サイズ|必要マーカー番号|
+|--|--|
+|2x2|0~3|
+|3x3|0~8|
+|4x4|0~15|
+|5x5|0~24|
+|3x2|0~5|
+|4x3|0~11|
+|5x4|0~19|
+|2x3|0~5|
+|3x4|0~11|
+
+### むずかしさ
+
+|むずかしさ|詳細|
+|--|--|
+|かんたん|入れ替え|
+|ふつう|入れ替え、90度回転|
+|むずかしい|入れ替え、90度回転&180度回転|
+
+### 画像抽選
+
+ボタンを押すとランダムに画像を変更できる
+""")
+
+
 # dictionary = video.aruco.Dictionary_get(video.aruco.DICT_5X5_50)
 # カメラメイン処理
 def video_frame_callback(frame):
     global video
     global is_random_img
+    global option_rotate
     # global agree
     
     frame = frame.to_ndarray(format = 'bgr24')
@@ -285,8 +342,12 @@ def video_frame_callback(frame):
     frame3 = video.trimming(frame2)
     com = video.comparison(video.comparison_img, frame3, dsize)
     
+    if not option_rotate == "デフォルト":
+        frame = cv2.flip(frame, -1)
+    
+    
     if  com > 0.9980:
-    # if  com > 0.9975:
+        # if  com > 0.9975:
         # フチ
         cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (0, 0, 0), 8, cv2.LINE_AA)
         # 文字
@@ -297,6 +358,7 @@ def video_frame_callback(frame):
         # 文字
         cv2.putText(frame, f'{com}%', (0, 50), cv2.FONT_HERSHEY_PLAIN, 3, (255, 255, 255), 3, cv2.LINE_AA)
         
+    
     return av.VideoFrame.from_ndarray(frame, format="bgr24")
 
 # https://github.com/whitphx/streamlit-webrtc#pull-values-from-the-callback
@@ -331,53 +393,3 @@ st.download_button(
     data=PDFbyte,
     file_name="ARmarker.pdf",
     mime='application/octet-stream')
-
-st.write(f"""
-# 遊び方
-
-※ここで使用している画像は全て、画像生成AIを使い作成したものになります。
-
-### PC推奨
-
-以下のものを準備
-* ARマーカー(ARマーカーダウンロードをクリック)
-* カメラ
-
-`赤いstartボタン`を押すし、しばらく待ちます。
-
-カメラの映像が出力されます。
-
-マーカーの`marker-0`をかざすと画像の一部が表示されます。
-
-あとは、サイドバーから、パズルサイズを変更や、むずかしさの変更、画像抽選などして遊びます。
-
-あっているかはパーセンテージが青くなったら一致していることになります。
-
-## サイドバーについて
-
-### パズルサイズ 横x縦
-
-|サイズ|必要マーカー番号|
-|--|--|
-|2x2|0~3|
-|3x3|0~8|
-|4x4|0~15|
-|5x5|0~24|
-|3x2|0~5|
-|4x3|0~11|
-|5x4|0~19|
-|2x3|0~5|
-|3x4|0~11|
-
-### むずかしさ
-
-|むずかしさ|詳細|
-|--|--|
-|かんたん|入れ替え|
-|ふつう|入れ替え、90度回転|
-|むずかしい|入れ替え、90度回転&180度回転|
-
-### 画像抽選
-
-ボタンを押すとランダムに画像を変更できる
-""")
