@@ -31,6 +31,7 @@ option = st.sidebar.selectbox(
     options = ["2x2", "3x3", "4x4", "5x5", "3x2", "4x3", "5x4", "2x3", "3x4"]
 )
 
+# カメラの読み取り方向
 option_rotate = st.sidebar.selectbox(
     label = "カメラの読み取り向き",
     options = ["上下左右反転", "デフォルト"]
@@ -225,7 +226,7 @@ st.write(f"""
 def video_frame_callback(frame):
     global video
     global is_random_img
-    global option_rotate
+    global option_rotate # カメラの読み取り方向
     # global agree
     
     frame = frame.to_ndarray(format = 'bgr24')
@@ -342,6 +343,7 @@ def video_frame_callback(frame):
     frame3 = video.trimming(frame2)
     com = video.comparison(video.comparison_img, frame3, dsize)
     
+    # カメラの読み取り方向
     if not option_rotate == "デフォルト":
         frame = cv2.flip(frame, -1)
     
