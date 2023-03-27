@@ -220,7 +220,7 @@ st.write(f"""
 ボタンを押すとランダムに画像を変更できる
 """)
 
-s.error('現在このWEBで利用しているライブラリのエラーでカメラが利用できません')
+st.error('現在このWEBで利用しているライブラリのエラーでカメラが利用できません')
 
 # dictionary = video.aruco.Dictionary_get(video.aruco.DICT_5X5_50)
 # カメラメイン処理
